@@ -1,23 +1,3 @@
-/*
- * Database Schema
- * customer = {
- *   id: uuid,
- *   name: string,
- *   password: string,
- *}
- * restaurant = {
- *   id: uuid,
- *   name: string,
- *}
- * reservation = {
- *   id: uuid,
- *  date: date not null,
- * party_count: integer not null,
- * restaurant_id: uuid REFERENCES restaurants table not null,
- * customer_id: uuid REFERENCES customers table not null,
- */
-
-
 const pg = require('pg')
 const client = new pg.Client(
 	process.env.DATABASE_URL ||
@@ -27,6 +7,7 @@ const uuid = require('uuid')
 
 const createTables = async () => {
 	const SQL = `
+	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS reservations;
     DROP TABLE IF EXISTS restaurants;
     DROP TABLE IF EXISTS customers;
