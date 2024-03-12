@@ -59,7 +59,7 @@ app.delete(
 	'/api/customers/:customer_id/reservations/:id',
 	async (req, res, next) => {
 		try {
-			res.send(await destroyReservation(req.params))
+			res.status(204).send(await destroyReservation(req.params))
 		} catch (error) {
 			next(error)
 		}
@@ -74,27 +74,34 @@ app.use((err, req, res, next) => {
 const init = async () => {
 	const port = process.env.PORT || 3000
 	await client.connect()
-	console.log('connected to database')
+	console.log('\x1b[33m ---------------------- \x1b[0m')
+	console.log('\x1b[33m Connected to database\x1b[0m')
+	console.log('\x1b[33m ---------------------- \x1b[0m')
 
 	await createTables()
-	console.log('created tables')
+	console.log('\x1b[35m Created tables\x1b[0m')
+	console.log('\x1b[35m ---------------------- \x1b[0m')
 
 	const [customers1, customers2, customers3] = await Promise.all([
 		createCustomer({ username: 'moe', password: 'moe' }),
 		createCustomer({ username: 'larry', password: 'larry' }),
 		createCustomer({ username: 'curly', password: 'curly' }),
 	])
-	console.log('created customers')
+	console.log('\x1b[31m Created Customers \x1b[0m')
+	console.log('\x1b[31m ---------------------- \x1b[0m')
 
 	const [restaurants1, restaurants2, restaurants3] = await Promise.all([
 		createRestaurant({ name: 'restaurant1' }),
 		createRestaurant({ name: 'restaurant2' }),
 		createRestaurant({ name: 'restaurant3' }),
 	])
-	console.log('created restaurants')
+	console.log('\x1b[31m Created Restaurants \x1b[0m')
+	console.log('\x1b[31m ---------------------- \x1b[0m')
 
 	console.table(await fetchCustomers())
-	console.log('fetching restaurants')
+	console.log('\x1b[92m Fetching Restaurants \x1b[0m')
+	console.log('\x1b[31m ---------------------- \x1b[0m')
+
 	console.table(await fetchRestaurants())
 
 	const reservations = await Promise.all([
@@ -114,7 +121,8 @@ const init = async () => {
 			customerId: customers3.id,
 		}),
 	])
-	console.log('Fetching reservations')
+	console.log('\x1b[92m Created Reservations \x1b[0m')
+	console.log('\x1b[92m ---------------------- \x1b[0m')
 	console.table(reservations)
 
 	app.listen(port, () => console.log(`listening on port ${port}`))
